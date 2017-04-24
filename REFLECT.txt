@@ -1,11 +1,90 @@
-Name: firstname lastname
-NetID: abc123
-Hours Spent: Give an exact (decimal) number here
-Consulted With: provide names or NetIDs of any students, TAs, or professors you consulted with on the assignment. If you did not consult with anyone, you must explicitly write NONE.
-Resources Used: Any books, papers, or online resources. If you did not use any outside resources, you must explicitly write NONE 
-Impressions: Your answer here
+Name: Tanner Johnson
+NetID: tlj21
+Hours Spent: 9.0
+Consulted With: Dipro Bhowmik, TAs in Discussion.
+Resources Used: Stack Overflow, Assignment write-up + link to extra description 
+Impressions: This was a super exciting assignment! The emotional roller coaster is real. 
 ----------------------------------------------------------------------
 Problem 1: Describe testing
+	For testing, I modularized my code by breaking down compress and decompress methods into many helper methods. 
+	I checked to see if I was getting a reasonable codings output from makeCodingsFromTree by printing out 
+	all 257 buckets from my array. Quite expectedly, most the non-null values were alphabetical character codes
+	with the most frequent letters (vowels, etc.) having the shortest depth (i.e., highest frequency in the file read in). 
+	I was having issues with the recursive writeHeader method, so I compared a given huffed file (hidden1.txt.hf) with one 
+	I compressed myself, and found that they differed at an index within the header. So, I revisited the recursive call and 
+	found that I was adding too many 0 bits (one before each recursive call, where I should have been only adding one 0). 
+	Otherwise, the other methods were pretty straightforward. I typically broke up recursive methods into a main method 
+	and a recursive helper method (i.e., writeHeader & writeHeaderHelper). I created a sample.txt file where I knew frequencies
+	of character occurrences and could validate the codings printed to the console when I was debugging. To test whether the compress
+	and decompress methods worked correctly, I compressed both original text files, as well as binary (image) files with my 
+	compression method, then compressed that .hf file with my decompression method. Finally, I compared the .unhf file 
+	with the original file using the Compare tab on the GUI--all tests showed first bit difference at index -1, meaning the files
+	were identical. 
+
 Problem 2: Benchmark and analyze your code
+	How do compression rate and time depend upon file length (byte size) and alphabet size (non-null codings values perhaps)? 
+	Compare Calgary and Waterloo directories 
+	
+	CALGARY DIRECTORY:		FILE LENGTH			ALPH SIZE			COMPRESSION TIME		% SPACE SAVED
+		bib					111261				82					0.041					34.50
+		book1				768771				83					0.054					41.89
+		book2				610856				97					0.031					40.99
+		geo					102400				257					0.012					40.20
+		news				377109				99					0.026					39.14
+		obj1				21504				257					0.005					38.97
+		obj2				246814				257					0.017					37.01
+		paper1				53161				96					0.005					37.01
+		paper2				82199				92					0.007					37.18
+		paper3				46526				85					0.003					37.26
+		paper6				38105				94					0.005					37.25
+		pic					513216				160					0.019					44.49
+		progc				39611				93					0.004					44.36
+		progl				71646				88					0.007					44.25
+		progp				48379				90					0.008					44.16
+		trans				93695				100					0.007					43.76
+		Total				3226253				257					0.251					43.76
+	*According to an analysis in R, time vs alph is constant, compression rate vs alph is constant,
+	compression rate vs byte size is constant, and time vs byte size is linear in O(file size). All but the latter
+	delivered insignificant p-values for both linear and log-transformation regressions. 
+	
+	WATERLOO DIRECTORY:		FILE LENGTH			ALPH SIZE			COMPRESSION TIME		% SPACE SAVED
+		barb				262274				231					0.068					6.24
+		bird				65666				156					0.009					7.89
+		boat				262274				231					0.022					9.05
+		bridge				65666				257					0.005					8.47
+		camera				65666				254					0.008					8.73
+		circles				65666				21					0.003					14.32
+		clegg				2149096				257					0.179					7.76
+		crosses				65666				19					0.004					9.50
+		france				333442				250					0.023					10.65
+		frog				309388				117					0.023					12.92
+		frymire				3706306				186					0.201					27.06
+		goldhill			65666				227					0.006					26.87
+		horiz				65666				25					0.003					27.39
+		library				163458				227					0.010					27.37
+		mandrill			262274				227					0.014					26.71
+		monarch				1179784				254					0.065					24.02
+		mountain			307330				118					0.018					23.95
+		peppers				786568				256					0.049					22.39
+		sail				1179784				252					0.113					20.90
+		serrano				1498414				238					0.074					21.36
+		slope				65666				249					0.008					21.28
+		squares				65666				21					0.003					21.59
+		text				65666				18					0.003					21.91
+		tulips				1179784				254					0.074					20.41
+		washsat				262274				51					0.016					21.19
+		zelda				262274				188					0.021					20.97
+		Total				14761384			257					1.022					20.97
+	*Essentially, the same analysis in R holds for Waterloo files. All relationships previously described
+	are constant except time vs byte size, which is linear in O(file size). Time vs alph appeared somewhat linear
+	but not with a linear regression fit at p-val < 0.05.
+
 Problem 3: Text vs. Binary 
+	Text files compress more than binary (image) files because binary files are already compressed to some degree. 
+
 Problem 4: Compressing compressed files
+	There is no benefit to compressing an already compressed file in the way we've done it with the Huffman algorithm. 
+	Actually, when we re-compress an already compressed file, we usually get a somewhat larger file, which is 
+	counter intuitive to the idea of compression. Huffman creates an optimal (greedy) tree, and we can't do better than
+	that with this method, so there is no benefit to compressing another time. 
+

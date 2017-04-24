@@ -541,6 +541,13 @@ public class HuffViewer {
 			updater.stop();
 			updater.updateStatus(Status.Complete, "test complete");
 			updater.addContent("Info", getInfo(times, toCompress.toArray(new File[toCompress.size()]), compressed));
+//			// for benchmarking 
+//			System.out.println("Times:");
+//			for (int k=0; k < times.length; k++) {
+//				System.out.println(times[k]);
+//			}
+//			System.out.println("File lengths:");
+			
 		});
 		thread.start();
 	}
